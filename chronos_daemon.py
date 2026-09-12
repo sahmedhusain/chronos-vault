@@ -4,7 +4,7 @@ import time
 import tarfile
 from datetime import datetime
 
-LOG_FILE = os.path.join("logs", "backup_service.log")
+LOG_FILE = os.path.join("logs", "chronos_daemon.log")
 SCHEDULE_FILE = "backup_schedules.txt"
 BACKUPS_DIR = "backups"
 

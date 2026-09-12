@@ -4,9 +4,9 @@ import signal
 import subprocess
 from datetime import datetime
 
-LOG_FILE = os.path.join("logs", "backup_manager.log")
+LOG_FILE = os.path.join("logs", "chronos_vault.log")
 SCHEDULE_FILE = "backup_schedules.txt"
-PID_FILE = ".backup_service.pid"
+PID_FILE = ".chronos_daemon.pid"
 BACKUPS_DIR = "backups"
 
 def log_message(message):
@@ -55,7 +55,7 @@ def get_service_pid():
                     os.remove(PID_FILE)
         output = subprocess.check_output(["ps", "-A", "-o", "pid,command"], text=True)
         for line in output.splitlines():
-            if "backup_service.py" in line and "python" in line:
+            if "chronos_daemon.py" in line and "python" in line:
                 pid = int(line.strip().split()[0])
                 if pid != os.getpid():
                     with open(PID_FILE, "w") as f:
@@ -114,24 +114,24 @@ def cmd_start():
         if pid is not None:
             log_message("Error: backup_service already running")
             return
-        service_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backup_service.py")
+        service_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chronos_daemon.py")
         proc = subprocess.Popen([sys.executable, service_script], start_new_session=True)
         with open(PID_FILE, "w") as f:
             f.write(str(proc.pid))
-        log_message("backup_service started")
+        log_message("chronos_daemon started")
     except Exception:
-        log_message("Error: can't start backup_service")
+        log_message("Error: can't start chronos_daemon")
 
 def cmd_stop():
     try:
         pid = get_service_pid()
         if pid is None:
-            log_message("Error: can't stop backup_service")
+            log_message("Error: can't stop chronos_daemon")
             return
         os.kill(pid, signal.SIGTERM)
         if os.path.exists(PID_FILE):
             os.remove(PID_FILE)
-        log_message("backup_service stopped")
+        log_message("chronos_daemon stopped")
     except Exception:
         log_message("Error: can't stop backup_service")
 
