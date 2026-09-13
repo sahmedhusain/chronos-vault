@@ -93,8 +93,8 @@ sequenceDiagram
     participant Daemon as chronos_daemon.py
     participant Storage as backups/
 
-    User->>CLI: python3 chronos_vault.py create "/path/to/data;14:30;daily_backup"
-    CLI->>Sched: Append entry "/path/to/data;14:30;daily_backup"
+    User->>CLI: python3 chronos_vault.py create /path/to/data 14:30 daily_backup
+    CLI->>Sched: Append entry /path/to/data 14:30 daily_backup
     User->>CLI: python3 chronos_vault.py start
     CLI->>Daemon: Fork background daemon & write PID
     
